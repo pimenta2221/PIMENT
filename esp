@@ -1,0 +1,48 @@
+-- PIMENTA - ESP Brainrots Raros
+-- Compatível Delta Executor / Mobile
+
+local raridadesDesejadas = {
+    "God", "Secreto", "Saturnita", "Los Tralalleritos"
+}
+
+local function criarESP(objeto, texto)
+    local billboard = Instance.new("BillboardGui")
+    billboard.Adornee = objeto
+    billboard.Size = UDim2.new(0, 100, 0, 40)
+    billboard.StudsOffset = Vector3.new(0, 3, 0)
+    billboard.AlwaysOnTop = true
+
+    local label = Instance.new("TextLabel", billboard)
+    label.Size = UDim2.new(1, 0, 1, 0)
+    label.Text = texto
+    label.TextColor3 = Color3.fromRGB(255, 0, 0)
+    label.BackgroundTransparency = 1
+    label.TextStrokeTransparency = 0.5
+    label.Font = Enum.Font.GothamBlack
+    label.TextScaled = true
+
+    billboard.Parent = objeto
+end
+
+local function isRaro(nome)
+    for _, raridade in ipairs(raridadesDesejadas) do
+        if string.lower(nome):find(string.lower(raridade)) then
+            return true
+        end
+    end
+    return false
+end
+
+while wait(5) do
+    for _, brainrot in pairs(workspace:GetDescendants()) do
+        if brainrot:IsA("Model") and not brainrot:FindFirstChild("ESP") then
+            local nome = brainrot.Name
+            if isRaro(nome) then
+                local alvo = brainrot:FindFirstChildWhichIsA("Part") or brainrot.PrimaryPart or brainrot
+                criarESP(alvo, "🧠 " .. nome)
+                local tag = Instance.new("BoolValue", brainrot)
+                tag.Name = "ESP"
+            end
+        end
+    end
+end
